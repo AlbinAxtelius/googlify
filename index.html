@@ -3,9 +3,11 @@
   <head>
     <title>Googlify</title>
     <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <input type="file" accept="image/jpeg,image/png,image/jpg" />
+    <label for="image">Select file</label>
+    <input name="image" id="image" type="file" accept="image/jpeg,image/png,image/jpg" />
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface"></script>
     <script src="script.js"></script>
