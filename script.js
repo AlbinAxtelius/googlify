@@ -2,6 +2,7 @@ const assets = {
   eye: "./assets/eye.png",
   nose: "./assets/nose.png",
 };
+
 const createImage = (imageURL) =>
   new Promise((resolve, reject) => {
     const imageElement = document.createElement("img");
@@ -16,6 +17,7 @@ const createImage = (imageURL) =>
 
     imageElement.src = imageURL;
   });
+
 const createCanvas = (width, height) => {
   const canvas = document.createElement("canvas");
 
@@ -26,6 +28,7 @@ const createCanvas = (width, height) => {
 
   return [canvas, context];
 };
+
 const drawEye = async (x, y, faceSize, context) => {
   const scaleFactor = 0.2; //Scale of eye
   const eye = await createImage(assets.eye);
@@ -34,6 +37,7 @@ const drawEye = async (x, y, faceSize, context) => {
 
   context.drawImage(eye, x - size / 2, y - size / 2, size, size);
 };
+
 const drawNose = async (x, y, faceSize, context) => {
   const scaleFactor = 0.3; //Scale of eye
   const nose = await createImage(assets.nose);
@@ -42,6 +46,7 @@ const drawNose = async (x, y, faceSize, context) => {
 
   context.drawImage(nose, x - size / 2, y - size / 2, size, size);
 };
+
 const main = async (imageURL) => {
   const model = await blazeface.load();
 
