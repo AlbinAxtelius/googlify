@@ -39,7 +39,7 @@ const drawEye = async (x, y, faceSize, context) => {
 };
 
 const drawNose = async (x, y, faceSize, context) => {
-  const scaleFactor = 0.3; //Scale of eye
+  const scaleFactor = 0.3; //Scale of nose
   const nose = await createImage(assets.nose);
 
   const size = faceSize * scaleFactor;
@@ -49,7 +49,6 @@ const drawNose = async (x, y, faceSize, context) => {
 
 const main = async (imageURL) => {
   const model = await blazeface.load();
-
   const image = await createImage(imageURL);
 
   const predictions = await model.estimateFaces(image, false);
@@ -64,9 +63,9 @@ const main = async (imageURL) => {
     const faceSize = Math.max(...[end[0] - start[0], end[1] - start[1]]);
 
     const [
-      [rightEyeX, rightEyeY],
-      [leftEyeX, leftEyeY],
-      [noseX, noseY],
+      [rightEyeX, rightEyeY], //Position for right eye
+      [leftEyeX, leftEyeY],   //Position for left eye
+      [noseX, noseY],         //Position for nose
     ] = prediction.landmarks;
 
     await drawEye(rightEyeX, rightEyeY, faceSize, context);
