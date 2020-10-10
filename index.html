@@ -7,7 +7,15 @@
   </head>
   <body>
     <label for="image">Select file</label>
-    <input name="image" id="image" type="file" accept="image/jpeg,image/png,image/jpg" />
+    <div class="center-children">
+      <img alt="Generated image" />
+    </div>
+    <input
+      name="image"
+      id="image"
+      type="file"
+      accept="image/jpeg,image/png,image/jpg"
+    />
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-cpu"></script>

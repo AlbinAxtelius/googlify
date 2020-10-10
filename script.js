@@ -2,6 +2,10 @@ const assets = {
   eye: "./assets/eye.png",
 };
 
+const state = {
+  imageElement: null,
+};
+
 const createImage = (imageURL) =>
   new Promise((resolve, reject) => {
     const imageElement = document.createElement("img");
@@ -47,33 +51,35 @@ const main = async (imageURL) => {
 
   context.drawImage(image, 0, 0);
 
-  predictions.forEach(async (prediction) => {
+  const promises = predictions.map(async (prediction) => {
     const start = prediction.topLeft;
     const end = prediction.bottomRight;
     const faceSize = Math.max(...[end[0] - start[0], end[1] - start[1]]);
 
     const [
       [rightEyeX, rightEyeY], //Position for right eye
-      [leftEyeX, leftEyeY],   //Position for left eye
+      [leftEyeX, leftEyeY], //Position for left eye
     ] = prediction.landmarks;
 
     await drawEye(rightEyeX, rightEyeY, faceSize, context);
     await drawEye(leftEyeX, leftEyeY, faceSize, context);
-    await drawNose(noseX, noseY, faceSize, context);
   });
 
-  const existingCanvas = document.querySelector("canvas");
+  await Promise.all(promises);
 
-  if (existingCanvas) {
-    document.body.replaceChild(canvas, existingCanvas);
-  } else {
-    document.body.appendChild(canvas);
-  }
+  const src = canvas.toDataURL();
+
+  state.imageElement.src = src;
 };
+(async () => {
+  const imageElement = document.querySelector("img");
 
-document
-  .querySelector("input")
-  .addEventListener("change", ({ target: { files } }) => {
-    const url = URL.createObjectURL(files[0]);
-    main(url);
-  });
+  state.imageElement = imageElement;
+
+  document
+    .querySelector("input")
+    .addEventListener("change", ({ target: { files } }) => {
+      const url = URL.createObjectURL(files[0]);
+      main(url);
+    });
+})();

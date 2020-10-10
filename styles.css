@@ -4,18 +4,29 @@ body {
 }
 
 input {
-  display:none;
+  display: none;
 }
 
 label {
-  display:flex;
+  display: flex;
   height: 60px;
-  background: #32AFE6;
+  background: #32afe6;
   justify-content: center;
   align-items: center;
-  color:white;
+  color: white;
   font-weight: bold;
   font-size: 1.5rem;
-  cursor: pointer;  
+  cursor: pointer;
   box-shadow: 0 -4px 8px black;
+}
+
+.center-children {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+img {
+  max-height: 80vh;
+  max-width: 80vw;
 }
