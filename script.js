@@ -1,6 +1,5 @@
 const assets = {
   eye: "./assets/eye.png",
-  nose: "./assets/nose.png",
 };
 
 const createImage = (imageURL) =>
@@ -38,16 +37,7 @@ const drawEye = async (x, y, faceSize, context) => {
   context.drawImage(eye, x - size / 2, y - size / 2, size, size);
 };
 
-const drawNose = async (x, y, faceSize, context) => {
-  const scaleFactor = 0.3; //Scale of nose
-  const nose = await createImage(assets.nose);
-
-  const size = faceSize * scaleFactor;
-
-  context.drawImage(nose, x - size / 2, y - size / 2, size, size);
-};
-
-const main = async (imageURL) => {
+const generateImage = async (imageURL) => {
   const model = await blazeface.load();
   const image = await createImage(imageURL);
 
@@ -57,34 +47,50 @@ const main = async (imageURL) => {
 
   context.drawImage(image, 0, 0);
 
-  predictions.forEach(async (prediction) => {
+  const promises = predictions.map(async (prediction) => {
     const start = prediction.topLeft;
     const end = prediction.bottomRight;
-    const faceSize = Math.max(...[end[0] - start[0], end[1] - start[1]]);
 
-    const [
-      [rightEyeX, rightEyeY], //Position for right eye
-      [leftEyeX, leftEyeY],   //Position for left eye
-      [noseX, noseY],         //Position for nose
-    ] = prediction.landmarks;
+    const faceWidth = end[0] - start[0];
+    const faceHeight = end[1] - start[1];
+
+    const faceSize = Math.max(faceWidth, faceHeight);
+
+    const rightEyeX = prediction.landmarks[0][0];
+    const rightEyeY = prediction.landmarks[0][1];
+
+    const leftEyeX = prediction.landmarks[1][0];
+    const leftEyeY = prediction.landmarks[1][1];
+
+    // const [
+    //   [rightEyeX, rightEyeY], //Position for right eye
+    //   [leftEyeX, leftEyeY], //Position for left eye
+    // ] = prediction.landmarks;
 
     await drawEye(rightEyeX, rightEyeY, faceSize, context);
     await drawEye(leftEyeX, leftEyeY, faceSize, context);
-    await drawNose(noseX, noseY, faceSize, context);
   });
 
-  const existingCanvas = document.querySelector("canvas");
+  await Promise.all(promises);
 
-  if (existingCanvas) {
-    document.body.replaceChild(canvas, existingCanvas);
-  } else {
-    document.body.appendChild(canvas);
-  }
+  return canvas.toDataURL();
 };
 
-document
-  .querySelector("input")
-  .addEventListener("change", ({ target: { files } }) => {
-    const url = URL.createObjectURL(files[0]);
-    main(url);
-  });
+(async () => {
+  const imageElement = document.querySelector("img");
+
+  document
+    .querySelector("input")
+    .addEventListener("change", async ({ target: { files } }) => {
+      if (files.length === 0) return alert("No files provided.");
+
+      const file = files[0];
+
+      if (!file.type.startsWith("image")) return alert("No image provided");
+
+      const url = URL.createObjectURL(files[0]);
+      const src = await generateImage(url);
+
+      imageElement.src = src;
+    });
+})();

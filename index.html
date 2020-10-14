@@ -4,10 +4,27 @@
     <title>Googlify</title>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
-    <label for="image">Select file</label>
-    <input name="image" id="image" type="file" accept="image/jpeg,image/png,image/jpg" />
+    <header>
+      <h1>Googlify</h1>
+      <label for="image" class="center-children"
+        ><span>Select image</span></label
+      >
+    </header>
+    <input
+      name="image"
+      id="image"
+      type="file"
+      accept="image/jpeg,image/png,image/jpg"
+    />
+    <div class="center-children">
+      <img />
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-core"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-converter"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-backend-cpu"></script>
